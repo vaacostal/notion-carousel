@@ -1,4 +1,4 @@
-const username = "TU_USUARIO";
+const username = "vaacostal";
 const repository = "notion-carousel";
 const folder = "images";
 
