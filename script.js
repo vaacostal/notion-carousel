@@ -1,14 +1,45 @@
+// ========================================
+// CONFIGURACIÓN
+// ========================================
+
 const username = "vaacostal";
 const repository = "notion-carousel";
-const folder = "images";
 
-const apiURL = `https://api.github.com/repos/${username}/${repository}/contents/${folder}`;
+// ========================================
+// OBTENER LA CARPETA DESDE LA URL
+// ========================================
+
+const params = new URLSearchParams(window.location.search);
+
+const selectedFolder = params.get("folder");
+
+const folder = selectedFolder
+    ? `images/${selectedFolder}`
+    : "images";
+
+// ========================================
+// CONSTRUIR URL DE LA API
+// ========================================
+
+const apiURL =
+    `https://api.github.com/repos/${username}/${repository}/contents/${folder}`;
+
+// ========================================
+// VARIABLES
+// ========================================
 
 let images = [];
 let currentIndex = 0;
 
-const imageElement = document.getElementById("carousel-image");
-const counterElement = document.getElementById("counter");
+const imageElement =
+    document.getElementById("carousel-image");
+
+const counterElement =
+    document.getElementById("counter");
+
+// ========================================
+// CARGAR IMÁGENES
+// ========================================
 
 async function loadImages() {
 
@@ -17,17 +48,24 @@ async function loadImages() {
         const response = await fetch(apiURL);
 
         if (!response.ok) {
-            throw new Error("No se pudieron obtener las imágenes.");
+            throw new Error(
+                `Error ${response.status}: no se pudo acceder a la carpeta.`
+            );
         }
 
         const files = await response.json();
 
         images = files
-            .filter(file => /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name))
+            .filter(file =>
+                /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)
+            )
             .map(file => file.download_url);
 
         if (images.length === 0) {
-            counterElement.textContent = "No hay imágenes todavía.";
+
+            counterElement.textContent =
+                "No hay imágenes en esta carpeta.";
+
             return;
         }
 
@@ -36,10 +74,16 @@ async function loadImages() {
     } catch (error) {
 
         console.error(error);
-        counterElement.textContent = "Error al cargar las imágenes.";
+
+        counterElement.textContent =
+            "No se pudieron cargar las imágenes.";
 
     }
 }
+
+// ========================================
+// MOSTRAR IMAGEN
+// ========================================
 
 function showImage() {
 
@@ -48,6 +92,10 @@ function showImage() {
     counterElement.textContent =
         `${currentIndex + 1} / ${images.length}`;
 }
+
+// ========================================
+// BOTÓN SIGUIENTE
+// ========================================
 
 document.getElementById("next").addEventListener("click", () => {
 
@@ -60,6 +108,10 @@ document.getElementById("next").addEventListener("click", () => {
     showImage();
 });
 
+// ========================================
+// BOTÓN ANTERIOR
+// ========================================
+
 document.getElementById("prev").addEventListener("click", () => {
 
     currentIndex--;
@@ -70,5 +122,9 @@ document.getElementById("prev").addEventListener("click", () => {
 
     showImage();
 });
+
+// ========================================
+// INICIAR
+// ========================================
 
 loadImages();
