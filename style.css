@@ -36,20 +36,22 @@ body {
     display: block;
 }
 
+/* FLECHAS */
+
 .arrow {
     position: absolute;
     z-index: 2;
 
-    width: 42px;
-    height: 42px;
+    width: 24px;
+    height: 24px;
 
     border: none;
     border-radius: 50%;
 
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.75);
     color: #222;
 
-    font-size: 30px;
+    font-size: 18px;
     line-height: 1;
 
     cursor: pointer;
@@ -57,23 +59,36 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Aparecen al pasar el cursor sobre el carrusel */
+
+.carousel:hover .arrow {
+    opacity: 1;
 }
 
 .arrow:hover {
     background: white;
 }
 
+/* Posición de las flechas */
+
 .left {
-    left: 15px;
+    left: 8px;
 }
 
 .right {
-    right: 15px;
+    right: 8px;
 }
+
+/* CONTADOR */
 
 .counter {
     text-align: center;
     margin-top: 10px;
-    font-size: 13px;
+    font-size: 12px;
     color: #777;
 }
